@@ -6,7 +6,7 @@ const {
 } = require("../controllers/stores");
 
 router
-    .route('/')
+    .route('/stores')
     .get(getStores)
     .post(addStore);
 

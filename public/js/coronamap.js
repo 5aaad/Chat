@@ -32,7 +32,6 @@ function updateMap(){
                 color = `rgb(${cases}, 0, 0)`
             }
             
-            // let testingTemplate = "<style>h1{position:absolute; display: none; left:100px;}</style><h1>" + cases + "</h1>";
             var popup = new mapboxgl.Popup({
                 // offset:[, -50],
                 closeButton:false,
@@ -45,8 +44,6 @@ function updateMap(){
                 todayCases+ "</h5>" + "<h5>Today Death:" + todayDeath + "</h5>"+
                 "<h5>Total Cases:" + totalCases+ "</h5>" + "<h5>Total Death:" +    
                 totalDeath+ "</h5>" + "<h5>Total Recovered:" + totalRecovered + "</h5>" +
-                "<h5> Death Rate:" + ((100/totalCases) * totalDeath).toFixed(2) + "</h5>" +
-                "<h5> Recovery Rate:" + ((100/totalCases) * totalRecovered).toFixed(2) + "</h5>" +
                 "</div>"
 
             );

@@ -7,15 +7,20 @@
     "@fortawesome/fontawesome-free": "^5.15.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "child_process": "^1.0.2",
+    "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "fs": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "moments": "0.0.2",
     "mongoose": "^5.11.1",
+    "node-geocoder": "^3.27.0",
     "nodemon": "^2.0.6",
     "request": "^2.88.2",
     "socket.io": "^3.0.4",
-    "socket.io-client": "^3.0.4"
+    "socket.io-client": "^3.0.4",
+    "util": "^0.12.3"
   },
   "devDependencies": {},
   "scripts": {
