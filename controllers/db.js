@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const connectDB = async () => {
+const connectDB = async function () {
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI, {
             useNewUrlParser: true,
@@ -9,8 +9,8 @@ const connectDB = async () => {
             useFindAndModify: false
         });
 
-        console.log('MongoDB connected on port 27017');
-    } catch(error) {
+        console.log(`MongoDB connected: ${conn.connection.host}`.blue.bold);
+    } catch (error) {
         console.error(error);
         process.exit(1);
     }

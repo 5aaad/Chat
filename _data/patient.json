@@ -1,0 +1,54 @@
+[
+    {
+	    "_id": "608bbb140856a444208d3a07",
+	    "name": "Doctor",
+	    "email": "doctor@gmail.com",
+	    "role": "doctor",
+	    "password": "123456",
+	    "age": "23",
+	    "bloodGroup": "B+",
+	    "isPreviouslyDiagnosed": "false",
+	    "address": "Sialkot",
+	    "gender": "M",
+	    "phoneNumber": "+923331234567"
+    },
+    {
+	    "_id": "6087e11036771b2fc4099363",
+	    "name": "Saad",
+	    "email": "saad@gmail.com",
+	    "role": "patient",
+	    "password": "123456", 
+	    "age": "23",
+	    "bloodGroup": "B+",
+	    "isPreviouslyDiagnosed": "false",
+	    "address": "Sialkot",
+	    "gender": "M",
+	    "phoneNumber": "+923331234567"
+    },
+    {
+        "_id": "608bcc7f723a103644a06223",
+	    "name": "Hamza",
+	    "email": "hamza@gmail.com",
+	    "role": "donationPoint",
+	    "password": "123456", 
+	    "age": "23",
+	    "bloodGroup": "B+",
+	    "isPreviouslyDiagnosed": "false",
+	    "address": "Sialkot",
+	    "gender": "M",
+	    "phoneNumber": "+923333333333"
+    },
+	{
+        "_id": "608bce0059d92b2784affad6",
+	    "name": "admin",
+	    "email": "admin@gmail.com",
+	    "role": "admin",
+	    "password": "123456", 
+	    "age": "23",
+	    "bloodGroup": "B+",
+	    "isPreviouslyDiagnosed": "false",
+	    "address": "Sialkot",
+	    "gender": "M",
+	    "phoneNumber": "+923337654321"
+    }
+]

@@ -1,4 +1,4 @@
-//jshint esversion: 6
+// jshint esversion: 6
 
 const path = require("path")
 const express = require("express");
@@ -8,10 +8,12 @@ const request = require("request");
 const http = require("http");
 const mongoose = require("mongoose");
 const socketio = require("socket.io");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const fileUpload = require('express-fileupload');
 const cors = require("cors");
+const errorHandler = require("./middleware/error");
+const colors = require("colors");
+const cookieParser = require('cookie-parser');
 const connectDB = require("./controllers/db");
 const formatMessage = require('./utils/messages');
 const {
@@ -20,16 +22,25 @@ const {
   userLeave,
   getRoomUsers
 } = require('./utils/users');
-const exec =  require('child_process').exec;
-const fs = require('fs'); 
+const exec = require('child_process').exec;
+const fs = require('fs');
 const util = require('util');
 let exec_prom = util.promisify(exec);
-
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 const botName = "COVID-19 Utility Bot";
-const JWT_SECRET = "ksjdfnkdsfjdshgjdskgbdskjgbdskjgb"
+const logger = require("./middleware/logger");
+
+app.use(logger);
+app.use(errorHandler);
+
+// Route Files
+const points = require('./routes/points');
+const plasmas = require('./routes/plasmas');
+const auth = require('./routes/auth');
+const admin = require('./routes/admin');
+const reviews = require('./routes/reviews');
 
 // load env vars
 dotenv.config({
@@ -39,8 +50,10 @@ dotenv.config({
 // Connection to DB
 connectDB();
 
-// Body parser
+// File upload
+app.use(fileUpload());
 
+// Body parser
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
   limit: '50mb',
@@ -49,8 +62,10 @@ app.use(bodyParser.urlencoded({
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Enable cors
+// Cookie parser
+app.use(cookieParser());
 
+// Enable cors
 app.use(cors());
 
 // Chat Module
@@ -109,57 +124,7 @@ io.on('connection', socket => {
   });
 });
 
-
-
-// Users Schema
-
-const userSchema = new mongoose.Schema({
-
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  }
-}, {
-  collection: "users"
-})
-
-const User = mongoose.model("User", userSchema);
-
-// Patient Schema
-
-const patientSchema = new mongoose.Schema({
-  patientID: Number,
-  name: String,
-  age: Number,
-  gender: String,
-  previouslyDiagnosed: Boolean,
-  bloodGroup: String,
-  password: String
-});
-
-const Patient = mongoose.model("Patient", patientSchema);
-
-// Doctor Schema
-
-const doctorSchema = new mongoose.Schema({
-  doctorID: Number,
-  name: String,
-  age: Number,
-  qualification: String,
-  experience: String,
-  location: String,
-  feedback: Number
-});
-
-const Doctor = mongoose.model("Doctor", doctorSchema);
-
 // COVID-19 API
-
 var worldWideCases;
 var worldWideTodayCases;
 var worldWideDeaths;
@@ -205,15 +170,15 @@ request("https://disease.sh/v3/covid-19/countries/Pakistan?strict=true", functio
 
 //GET Routes
 
-app.get("/", function(req, res){
-  res.render("welcome");
-});
+// app.get("/", function (req, res) {
+//   res.render("welcome");
+// });
 
 app.get("/stores", function (req, res) {
   res.render("stores");
 });
 
-app.get("/addStore", function(req, res){
+app.get("/addStore", function (req, res) {
   res.render("addStore");
 });
 
@@ -250,7 +215,7 @@ app.get("/chat", function (req, res) {
   res.render("chat");
 });
 
-app.get("/index", function(req, res){
+app.get("/index", function (req, res) {
   res.render("index");
 })
 
@@ -260,210 +225,102 @@ app.get("/profile", function (req, res) {
 
 covidPrediction = {};
 
-app.get("/predictionCovid", function(req, res){
-  res.render('covidPrediction', {prediction: 'hi', probability: 'bye'});
+app.get("/predictionCovid", function (req, res) {
+  res.render('covidPrediction', {
+    prediction: 'hi',
+    probability: 'bye'
+  });
 })
 
 app.get('/prediction', (req, res) => {
   res.render('covidImageUpload');
 });
 
+
+// POST routes
+
 app.post('/prediction', (req, res) => {
   // res.render('covidPrediction');
 
   image = {
-		data: req.body.image
-	};
+    data: req.body.image
+  };
 
-	var json = JSON.stringify(image);
-	fs.writeFile('./covid-model-files/image_json_file.json', json, 'utf8', function(err){
-		if(err){
-			console.log(err);
-		}
-	});
+  var json = JSON.stringify(image);
+  fs.writeFile('./covid-model-files/image_json_file.json', json, 'utf8', function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
 
   const pythonFilePath = 'E:/Test/covid-model-files/model.py';
   const imageFilePath = 'E:/Test/covid-model-files/image_json_file.json';
 
-	var commands = [
-        'conda activate covid-site',
-        'python '+pythonFilePath+' --infile '+imageFilePath
-    ];
+  var commands = [
+    'conda activate covid-site',
+    'python ' + pythonFilePath + ' --infile ' + imageFilePath
+  ];
 
-	// var pythonProcess = exec(commands.join(' & '),
-	//     	 function(error, stdout, stderr){
-	//        		// console.log(error);
-	//         	console.log(stdout);
-	//         	// console.log(stderr);
-	//     }
-	// );
-	var predictionOutput = {};
+  // var pythonProcess = exec(commands.join(' & '),
+  //     	 function(error, stdout, stderr){
+  //        		// console.log(error);
+  //         	console.log(stdout);
+  //         	// console.log(stderr);
+  //     }
+  // );
+  var predictionOutput = {};
 
   async function pythonScript() {
     var pythonProcess = await exec_prom(commands.join(' & '),
-	    	 function(error, stdout, stderr){
-	       		// console.log(error);
-	        	// console.log(stdout);
-            // this.stdin.end();
-            // this.stdout.destroy();
-            // this.stderr.destroy()
-            
-	        	// console.log(stderr);
-            predictionOutput = JSON.parse(stdout);
-            console.log(predictionOutput);
-            // res.redirect('/predictionCovid')
-            // global.alert("Your result is "+predictionOutput.prediction);
-            // res.render('covidPrediction', {prediction: 'hi', probability: 'bye'});
-            res.redirect("predictionCovid");
-	    }
-	);
-  
-  // pythonProcess.kill('SIGINT');
-  //  pythonProcess.on('exit', function (code) {
-	//     console.log("python process exited with code "+code);
-	// });
+      function (error, stdout, stderr) {
+        // console.log(error);
+        // console.log(stdout);
+        // this.stdin.end();
+        // this.stdout.destroy();
+        // this.stderr.destroy()
+
+        // console.log(stderr);
+        predictionOutput = JSON.parse(stdout);
+        console.log(predictionOutput);
+        // res.redirect('/predictionCovid')
+        // global.alert("Your result is "+predictionOutput.prediction);
+        // res.render('covidPrediction', {prediction: 'hi', probability: 'bye'});
+        res.redirect("predictionCovid");
+      }
+    );
+
+    // pythonProcess.kill('SIGINT');
+    //  pythonProcess.on('exit', function (code) {
+    //     console.log("python process exited with code "+code);
+    // });
   }
   pythonScript();
 
+  // pythonProcess.stdout.on('data', function(data) {
 
-
-	// pythonProcess.stdout.on('data', function(data) {
-
-	// 	predictionOutput = JSON.parse(data);
+  // 	predictionOutput = JSON.parse(data);
 
   //   res.render('covidPrediction', {prediction: predictionOutput.prediction, probability: predictionOutput.probability})
 
-	// });
-  
+  // });
+
   // pythonProcess.on('exit', function (code) {
-	//     console.log("python process exited with code "+code);
-	// });
+  //     console.log("python process exited with code "+code);
+  // });
 
   // res.render('covidPrediction', {prediction: 'hi', probability: 'bye'});
   // res.redirect('predictionCovid');
 });
 
+// Mount routers
+
 app.use('/api/v1/stores', require('./routes/stores'));
-
-// POST Routes
-
-app.post("/api/register", async (req, res) => {
-
-  const {
-    email,
-    password: plainTextPassword
-  } = req.body;
-
-  if (!email || typeof email !== "string") {
-    return res.json({
-      status: "error",
-      error: "Invalid email"
-    })
-  }
-
-  if (!plainTextPassword || typeof plainTextPassword !== "string") {
-    return res.json({
-      status: "error",
-      error: "Invalid password"
-    })
-  }
-
-  if (plainTextPassword.length < 5) {
-    return res.json({
-      status: "error",
-      error: "Password too small. It should be atleast 6 characters."
-    })
-  }
-
-  const password = await bcrypt.hash(plainTextPassword, 10);
-
-  try {
-    const response = await User.create({
-      email,
-      password
-    })
-    console.log("User created successfully: ", response);
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.json({
-        status: 'error',
-        error: "Email already in use."
-      })
-    }
-    throw error;
-  }
-
-  res.json({
-    status: 'ok'
-  });
-});
-
-// app.post("/signup", function(req, res){
-//     const userEmail = req.body.email;
-//     const userPassword = req.body.password;
-
-
-//     User.findOne({email: userEmail}, function(err, foundList){
-//       if(!err){
-//         if(!foundList){
-//           console.log("User is not registered");
-//           const newUser = newUser({
-//             email: userEmail,
-//             password: userPassword
-//           });
-
-//           newUser.save();
-//           res.render("signin");
-//         } else {
-//           alreadyRegisteredError = true;
-//           console.log("User is registered");
-//           res.render("signup");
-//         }
-//       }
-//     })
-// });
-//
-app.post("/api/login", async (req, res) => {
-
-  const {
-    email,
-    password
-  } = req.body;
-
-  const user = await User.findOne({
-    email,
-  }).lean()
-
-  if (!user) {
-    return res.json({
-      status: "error",
-      error: "Invalid username/password!"
-    });
-  }
-
-  if (await bcrypt.compare(password, user.password)) {
-
-    // The username/password is matched
-
-    const token = jwt.sign({
-      id: user._id,
-      email: user.email
-    }, JWT_SECRET);
-
-    return res.json({
-      status: "ok",
-      data: token
-    });
-  }
-
-  res.json({
-    status: "error",
-    data: "Invalid username/password!"
-  })
-})
-
-
+app.use('/api/v1/points', points);
+app.use('/api/v1/plasmas', plasmas);
+app.use('/api/v1/auth', auth);
+app.use('/api/v1/admin', admin);
+app.use('/api/v1/reviews', reviews);
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold));
