@@ -35,7 +35,7 @@ const PointSchema = new mongoose.Schema({
         street: String,
         city: String,
         state: String,
-        zipcode: String,
+        zipcode: Number,
         country: String
     },
     averageRating: {

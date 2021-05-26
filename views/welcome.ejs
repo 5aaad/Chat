@@ -2,41 +2,191 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome</title>
-  <link rel="icon" href="/images/icon.png">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="/css/sign.css" 
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Lato&family=Montserrat:wght@800&family=Ubuntu&display=swap"
-    rel="stylesheet">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<script src="https://kit.fontawesome.com/3da1a747b2.js"></script>
+	<!-- Bootstrap Links -->
+	<link rel="stylesheet" href="css/bootstrap.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="/css/all.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Lato&family=Montserrat:wght@800&family=Ubuntu&display=swap"
+		rel="stylesheet">
+	<link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+	<title>COVID-19 Utility | Welcome </title>
 </head>
 
 <body>
-  <section id="login">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-6">
-          <h1 class="main-heading">Welcome to COVID-19 Utility!</h1>
-          <hr>
-          <br>
-          <button class="button"><a href="/signup">Sign Up</a></button>
-          <button class="button"><a href="/signin">Sign In</a></button>
-        </div>
-        <div class="col-lg-6">
-          <img class="image" src="/images/mask.png" alt="Mask">
-        </div>
-      </div>
-    </div>
-  </section>
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="/"><i class="fas fa-briefcase-medical"></i> COVID-19 Utility</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="/loginChoice"><i class="fas fa-sign-in-alt"></i> Login</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/registerChoice"><i class="fas fa-user-plus"></i> Register</a>
+					</li>
+					<li class="nav-item d-none d-sm-block">
+						<a class="nav-link" href="#">|</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/points">Browse Donation Points or Doctors</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Showcase -->
+	<section class="showcase">
+		<div class="dark-overlay">
+			<div class="showcase-inner container">
+				<h1 class="display-4">Welcome to COVID-19 Utility!</h1>
+				<hr class="numbers-hr">
+				<p class="lead">Find nearest Donation points and Doctors</p>
+				<form action="/points/radius/" method="GET">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<input type="text" class="form-control" name="distance" placeholder="Kilometers From" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<input type="text" class="form-control" name="zipcode" placeholder="Enter Zipcode" />
+							</div>
+						</div>
+					</div>
+					<input type="submit" value="Find" class="btn btn-primary btn-block" />
+				</form>
+			</div>
+		</div>
+	</section>
+	<!-- Features -->
+	<section id="features">
+		<div class="row">
+			<div class="feature-box col-lg-4">
+				<img class="features-icon" src="/images/clock.png" alt="">
+				<h3 class="features-heading">COVID-19 Detection.</h3>
+				<p class="features-p">COVID-19 detection within no time.</p>
+			</div>
+			<div class="feature-box col-lg-4">
+				<img class="features-icon" src="/images/plasma.png" alt="">
+				<h3 class="features-heading">Plasma Donation.</h3>
+				<p class="features-p">We have made it easier for you and your loved ones.</p>
+			</div>
+			<div class="feature-box col-lg-4">
+				<img class="features-icon" src="/images/doctor.png" alt="">
+				<h3 class="features-heading">Consult Doctors.</h3>
+				<p class="features-p">Consult doctors online without leaving the comfort of your house.</p>
+			</div>
+		</div>
+	</section>
+
+
+
+
+</html>
+
+<!-- Latest bootcamps -->
+<!-- <section class="latest py-5 bg-light">
+			<div class="container">
+				<h3>Latest Bootcamps</h3>
+				<div class="card-group">
+					<div class="card">
+						<img src="img/image_1.jpg" class="card-img-top" alt="..." />
+						<div class="card-body">
+							<h5 class="card-title">
+								<a href="bootcamp.html"
+									>Devworks Bootcamp
+									<span class="float-right badge badge-success">8.8</span></a
+								>
+							</h5>
+							<span class="badge badge-dark mb-2">Boston, MA</span>
+							<p class="card-text">
+								Devworks is a full stack JavaScript Bootcamp located in the
+								heart of Boston that focuses on the technologies you need to get
+								a high paying job as a web developer
+							</p>
+							<p class="card-text">
+								<small class="text-muted"
+									>Web Development, UI/UX, Mobile Development</small
+								>
+							</p>
+						</div>
+					</div>
+					<div class="card">
+						<img src="img/image_2.jpg" class="card-img-top" alt="..." />
+						<div class="card-body">
+							<h5 class="card-title">
+								<a href="bootcamp.html"
+									>ModernTech Bootcamp
+									<span class="float-right badge badge-success">7.5</span></a
+								>
+							</h5>
+							<span class="badge badge-dark mb-2">Boston, MA</span>
+							<p class="card-text">
+								ModernTech has one goal, and that is to make you a rockstar
+								developer and/or designer with a six figure salary. We teach
+								both development and UI/UX
+							</p>
+							<p class="card-text">
+								<small class="text-muted"
+									>Web Development, UI/UX, Mobile Development</small
+								>
+							</p>
+						</div>
+					</div>
+					<div class="card">
+						<img src="img/image_3.jpg" class="card-img-top" alt="..." />
+						<div class="card-body">
+							<h5 class="card-title">
+								<a href="bootcamp.html"
+									>Codemasters
+									<span class="float-right badge badge-success">9.2</span></a
+								>
+							</h5>
+							<span class="badge badge-dark mb-2">Burlington, VT</span>
+							<p class="card-text">
+								Is coding your passion? Codemasters will give you the skills and
+								the tools to become the best developer possible. We specialize
+								in full stack web development and data science
+							</p>
+							<p class="card-text">
+								<small class="text-muted"
+									>Web Development, Data Science, Marketing</small
+								>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section> -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+	integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+</script>
+<script>
+	document.getElementById('token').innerHTML = document.cookie.split('token=')[1];
+</script>
+
 </body>
 
 </html>

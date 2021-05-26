@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://kit.fontawesome.com/3da1a747b2.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Lato&family=Montserrat:wght@800&family=Ubuntu&display=swap"
+        rel="stylesheet">
+    <title>COVID-19 Utility | Home</title>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-briefcase-medical"></i> COVID-19 Utility</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown">
+                            <i class="fas fa-user"></i> Account
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/managePoints">Manage Points</a>
+                            <a class="dropdown-item" href="/manageReviews">Manage Reviews</a>
+                            <a class="dropdown-item" href="/manageAccount">Manage Account</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/doctor/logout"><i class="fas fa-sign-out-alt"></i>
+                                Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Showcase -->
+    <section class="showcase">
+        <div class="dark-overlay">
+            <div class="showcase-inner container">
+                <h1 class="display-4" id="username">Home</h1>
+                <hr class="numbers-hr">
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="/prediction"><button class="btn btn-primary">COVID-19 Prediction</button></a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="/points"> <button class="btn btn-primary">Donation Points</button></a>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary">Patients</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="/chat"><button class="btn btn-primary">Chat</button></a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="/donate"><button class="btn btn-primary">Donate</button></a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="/bloodBank"><button class="btn btn-primary">Blood Bank</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- <section id="title">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-6">
+          <h1 id="title">Welcome to COVID-19 Utility! </h1>
+          <hr>
+          <button class="btn btn-dark btn-sm">Test</button>
+          <hr>
+
+          <button class="btn btn-dark btn-sm">COVID-19 Prediction</button>
+          <hr>
+          <button class="btn btn-dark btn-sm">Test</button>
+          <hr>
+
+          <button class="btn btn-dark btn-sm">COVID-19 Prediction</button>
+          <hr>
+          <button class="btn btn-dark btn-sm">Test</button>
+          <hr>
+        </div>
+
+        <div class="col-lg-6">
+          <img class="title-image" src="/images/mask.png" alt="mask.png">
+        </div>
+      </div>
+    </div>
+  </section> -->
+    <script>
+        token = document.cookie.split('token=')[1]
+        let url = '/doctor/me';
+        let h = new Headers();
+        h.append('Authorization', 'Bearer ' + token)
+
+        let req = new Request(url, {
+            method: 'GET',
+            mode: 'cors',
+            headers: h
+        });
+
+        fetch(req).then(res => res.json()).then(response => {
+            const {
+                data
+            } = response;
+            document.getElementById('username').innerHTML = 'Hello ' + data.name + '!';
+
+        }).catch(err => console.log(err.message))
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

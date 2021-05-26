@@ -23,7 +23,7 @@ router
             select: 'name description'
         }),
         getPlasmas)
-    .post(protect, authorize('donationPoints', 'admin'), addPlasma);
+    .post(addPlasma);
 
 router
     .route('/:id')

@@ -3,15 +3,18 @@ const asyncHandler = require('../middleware/async');
 const Patient = require('../models/Patient');
 
 // @desc Get all patient
-// @route GET /api/v1/auth/patients
+// @route GET /auth/patients
 // @access Private/Admin
 
 exports.getPatients = asyncHandler(async (req, res, next) => {
-    res.status(200).json(res.advancedResults);
+    res.status(200).json({
+        success: true,
+        data: patient
+    });
 });
 
 // @desc Get single patients
-// @route GET /api/v1/auth/patients/:id
+// @route GET /auth/patients/:id
 // @access Private/Admin
 
 exports.getPatient = asyncHandler(async (req, res, next) => {
@@ -24,7 +27,7 @@ exports.getPatient = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Create patient
-// @route POST /api/v1/auth/patients
+// @route POST /auth/patients
 // @access Private/Admin
 
 exports.createPatient = asyncHandler(async (req, res, next) => {
@@ -37,7 +40,7 @@ exports.createPatient = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update patient
-// @route PUT /api/v1/auth/patients/:id
+// @route PUT /auth/patients/:id
 // @access Private/Admin
 
 exports.updatePatient = asyncHandler(async (req, res, next) => {
@@ -53,7 +56,7 @@ exports.updatePatient = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Delete patient
-// @route DELETE /api/v1/auth/patients
+// @route DELETE /auth/patients
 // @access Private/Admin
 
 exports.deletePatient = asyncHandler(async (req, res, next) => {

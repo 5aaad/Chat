@@ -1,30 +1,35 @@
 <!DOCTYPE html>
-	<head>
-		<title>COVID-19 TESTING</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-	</head>
 
-	<body>
-        <div class="container-fluid">
-		<h1>COVID-19 TESTING USING X-RAY IMAGES</h1>
+<head>
+    <title>COVID-19 TESTING</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1>COVID-19 TESTING USING X-RAY IMAGES</h1>
+        <h1 style='color: yellow;' id='disclaimer'></h1>
         <hr>
         <div class="row">
-        <div class="col-lg-6">
-		<input id="image-selector" type="file"></div>
-        <div class="col-lg-6"> 
-		<button class="btn btn-primary btn-lg"id="predict-button">Predict</button></div>
-		<img id="selected-image" width="400" src=""/>
+            <div class="col-lg-6">
+                <input id="image-selector" type="file"></div>
+            <div class="col-lg-6">
+                <button class="btn btn-primary btn-lg"
+                    onclick="document.getElementById('disclaimer').innerHTML = 'Please wait, your prediction is running.<br/>You will be redirected once it is finished' "
+                    id="predict-button">Predict</button></div>
+            <img id="selected-image" width="400" src="" />
+        </div>
     </div>
-    </div>
-	</body>
+</body>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <script>
     let base64Image;
-    $("#image-selector").change(function() {
+    $("#image-selector").change(function () {
         let reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             let dataURL = reader.result;
             $('#selected-image').attr("src", dataURL);
             base64Image = dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
@@ -34,16 +39,16 @@
 
     });
 
-    $("#predict-button").click(function(){
-            let message = {
+    $("#predict-button").click(function () {
+        let message = {
             image: base64Image
         }
         console.log(message);
-        $.post("/prediction", message, function(response){
-            console.log(response);
+        $.post("/prediction/covid", message, function (response) {
+            window.location.href = response.redirectTo;
+
         });
     });
-    
 </script>
 
 </html>

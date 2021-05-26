@@ -12,11 +12,23 @@ exports.getPlasmas = asyncHandler(async function (req, res, next) {
         const plasmas = await Plasma.find({
             point: req.params.pointId
         });
+        var array = plasmas;
+        grouped = [];
 
-        return res.status(200).json({
+        array.forEach(function (o) {
+            if (!this[o.bloodGroup]) {
+                this[o.bloodGroup] = {
+                    bloodGroup: o.bloodGroup,
+                    amount: 0
+                };
+                grouped.push(this[o.bloodGroup]);
+            }
+            this[o.bloodGroup].amount += o.amount;
+        }, Object.create(null));
+        return res.status(200).render('plasma', {
             success: true,
             count: plasmas.length,
-            data: plasmas
+            data: grouped
         });
     } else {
         res.status(200).json(res.advancedResults);
@@ -24,7 +36,7 @@ exports.getPlasmas = asyncHandler(async function (req, res, next) {
 });
 
 // @desc    Get single plasma
-// @route   GET /api/v1/plasmas/:id
+// @route   GET /plasmas/:id
 // @access  Public
 exports.getPlasma = asyncHandler(async function (req, res, next) {
     const plasma = await Plasma.findById(req.params.id).populate({
@@ -42,11 +54,10 @@ exports.getPlasma = asyncHandler(async function (req, res, next) {
 });
 
 // @desc    Add plasma
-// @route   POST /api/v1/points/:pointId/plasmas
+// @route   /points/:pointId/plasmas
 // @access  Private
 exports.addPlasma = asyncHandler(async function (req, res, next) {
     req.body.point = req.params.pointId;
-    req.body.patient = req.patient.id;
 
     const point = await Point.findById(req.params.pointId);
 
@@ -54,15 +65,43 @@ exports.addPlasma = asyncHandler(async function (req, res, next) {
         return next(new ErrorResponse(`No donation point with the id of ${req.params.pointId}`), 404);
     }
 
-    // Make sure logged in user is donation point owner
-    if (point.patient.toString() !== req.patient.id && req.patient.role !== 'admin') {
-        return next(new ErrorResponse(`${req.patient.id} is not authorized to add plasma to donation point ${point._id}`))
-    }
-
     const plasma = await Plasma.create(req.body);
 
-    res.status(200).json({
+
+    res.status(200).render('plasma', {
         success: true,
         data: plasma
     });
+});
+
+// @desc    Acquire Plasma
+// @route   GET /plasmas
+// @route   POST /points/:pointId/plasmaAcquire
+// @access  Public
+exports.getPlasmas = asyncHandler(async function (req, res, next) {
+    if (req.params.pointId) {
+        const plasmas = await Plasma.find({
+            point: req.params.pointId
+        });
+        var array = plasmas;
+        grouped = [];
+
+        array.forEach(function (o) {
+            if (!this[o.bloodGroup]) {
+                this[o.bloodGroup] = {
+                    bloodGroup: o.bloodGroup,
+                    amount: 0
+                };
+                grouped.push(this[o.bloodGroup]);
+            }
+            this[o.bloodGroup].amount -= o.amount;
+        }, Object.create(null));
+        return res.status(200).render('plasma', {
+            success: true,
+            count: plasmas.length,
+            data: grouped
+        });
+    } else {
+        res.status(200).json(res.advancedResults);
+    }
 });

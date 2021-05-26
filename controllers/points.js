@@ -10,7 +10,7 @@ const advancedResults = require('../middleware/advancedResults');
 // @access Public
 
 exports.getPoints = asyncHandler(async function (req, res, next) {
-    res.status(200).json(res.advancedResults);
+    res.status(200).render('points', res.advancedResults);
 });
 
 // @desc Get single point
@@ -22,7 +22,7 @@ exports.getPoint = asyncHandler(async function (req, res, next) {
     if (!point) {
         return next(new ErrorResponse(`Point not found with id of ${req.params.id}`, 404));
     }
-    res.status(200).json({
+    res.status(200).render('point', {
         success: true,
         data: point
     });
@@ -77,7 +77,7 @@ exports.updatePoint = asyncHandler(async function (req, res, next) {
 });
 
 // @desc Delete point
-// @route DELETE /api/v1/points/:id
+// @route DELETE /points/:id
 // @access Private
 
 exports.deletePoint = asyncHandler(async function (req, res, next) {
@@ -105,11 +105,12 @@ exports.deletePoint = asyncHandler(async function (req, res, next) {
 // @access Private
 
 exports.getPointsInRadius = asyncHandler(async function (req, res, next) {
+    console.log(req.query, "eeeeee")
     const {
         zipcode,
         distance
-    } = req.params;
-
+    } = req.query;
+    console.log(req, "yes")
     // Get lat/long from geocoder
     const loc = await geocoder.geocode(zipcode);
     const lat = loc[0].latitude;
@@ -117,22 +118,72 @@ exports.getPointsInRadius = asyncHandler(async function (req, res, next) {
 
     // Calc radius using radians
     // Divide dist by radius of Earth
-    // Earth Radius = 3963 miles / 6378 kilometers
+    // Earth Radius = 6378 kilometers
     const radius = distance / 3963;
-
     const points = await Point.find({
         location: {
-            $geowithin: {
+            $geoWithin: {
                 $centerSphere: [
-                    [lng, lat], 3963
+                    [lng, lat], radius
                 ]
             }
         }
     });
 
-    res.status(200).json({
+    res.render('nearestPoint', {
         success: true,
         count: points.length,
         data: points
-    })
+    });
+});
+
+// @desc Upload photo for point
+// @route PUT /api/v1/points/:id/photo
+// @access Private
+
+exports.pointPhotoUpload = asyncHandler(async function (req, res, next) {
+    const point = await Point.findById(req.params.id);
+
+    if (!point) {
+        return next(new ErrorResponse(`Point not found with id of ${req.params.id}`, 404));
+    }
+
+    if (!req.files) {
+        return next(new ErrorResponse(`Please upload a file`, 400));
+    }
+
+    const file = req.files.file;
+
+    // Make sure that the image is a photo
+    if (!file.mimetype.startsWith('image')) {
+        return next(new ErrorResponse(`Please upload an image file`, 400));
+    }
+
+    // Check filesize
+    if (file.size > process.env.MAX_FILE_UPLOAD) {
+        return next(new ErrorResponse(`Please upload an image file less than ${process.env.MAX_FILE_UPLOAD}`, 400));
+    }
+
+    // Create custom filename
+    file.name = `photo_${point.name}${path.parse(file.name).ext}`;
+
+    file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+        if (err) {
+            console.log(err);
+            return next(new ErrorResponse(`Problem with file upload`, 500));
+        }
+
+        await Point.findByIdAndUpdate(req.params.id, {
+            photo: file.name
+        });
+
+        res.status(200).json({
+            success: true,
+            data: file.name
+        })
+    });
+
+    console.log(file.name);
+
+
 });

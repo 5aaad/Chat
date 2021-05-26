@@ -5,7 +5,8 @@ const {
     createPoint,
     updatePoint,
     deletePoint,
-    getPointsInRadius
+    getPointsInRadius,
+    pointPhotoUpload
 } = require('../controllers/points');
 
 const Point = require('../models/Point');
@@ -26,7 +27,8 @@ const {
 router.use('/:pointId/plasmas', plasmaRouter);
 router.use('/:pointId/reviews', reviewRouter);
 
-router.route('/radius/:zipcode/:distance').get(getPointsInRadius);
+router.route('/radius/').get(getPointsInRadius);
+router.route('/:id/photo').put(pointPhotoUpload);
 
 router
     .route('/')

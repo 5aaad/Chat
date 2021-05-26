@@ -4,21 +4,19 @@ const Review = require('../models/Review');
 const Point = require('../models/Point');
 
 // @desc Get all reviews
-// @route GET /api/v1/reviews
-// @route GET /api/v1/points/:pointId/reviews
+// @route GET /points/:pointId/reviews
 // @access Public
-exports.getReviews = asyncHandler(async function (req, res, next) {
+exports.getReviews = asyncHandler(async (req, res, next) => {
     if (req.params.pointId) {
         const reviews = await Review.find({
             point: req.params.pointId
         });
-        return res.status(200).json({
+
+        return res.status(200).render('reviews', {
             success: true,
             count: reviews.length,
             data: reviews
         });
-    } else {
-        res.status(200).json(res.advancedResults);
     }
 });
 
@@ -43,12 +41,29 @@ exports.getReview = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc      Add review
-// @route     POST /api/v1/points/:pointId/reviews
+// @desc      Render Add review
+// @route     GET /points/addreview/:pointId
 // @access    Private
-exports.addReview = asyncHandler(async (req, res, next) => {
+exports.getAddReview = asyncHandler(async (req, res, next) => {
+    // req.body.point = req.params.pointId;
+    const pointId = req.params.pointId;
+
+    const point = await Point.findById(req.params.pointId);
+
+    if (!point) {
+        return next(new ErrorResponse(`No point with the id of ${req.params.pointId}`, 404));
+    }
+
+    res.render('addReview', {
+        data: point
+    });
+});
+
+// @desc      Add review
+// @route     POST /points/addreview/:pointId
+// @access    Private
+exports.postAddReview = asyncHandler(async (req, res, next) => {
     req.body.point = req.params.pointId;
-    req.body.patient = req.patient.id;
 
     const point = await Point.findById(req.params.pointId);
 

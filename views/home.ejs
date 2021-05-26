@@ -1,32 +1,94 @@
-<%- include("partials/header"); -%>
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>COVID-19 Utility</title>
-  <!-- Bootstrap -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-  </script>
-
-  <link rel="stylesheet" href="/css/all.css">
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <script src="https://kit.fontawesome.com/3da1a747b2.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/styles.css" />
   <link
     href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Lato&family=Montserrat:wght@800&family=Ubuntu&display=swap"
     rel="stylesheet">
-  <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+  <title>COVID-19 Utility | Home</title>
 </head>
 
 <body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="/"><i class="fas fa-briefcase-medical"></i> COVID-19 Utility</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <section id="title">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+              <i class="fas fa-user"></i> Account
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/managePoints">Manage Points</a>
+              <a class="dropdown-item" href="/manageReviews">Manage Reviews</a>
+              <a class="dropdown-item" href="/manageAccount">Manage Account</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Showcase -->
+  <section class="showcase">
+    <div class="dark-overlay">
+      <div class="showcase-inner container">
+        <h1 class="display-4" id="username">Home</h1>
+        <hr class="numbers-hr">
+        <div class="row">
+          <div class="col-md-2">
+            <a href="/prediction"><button class="btn btn-primary">COVID-19 Prediction</button></a>
+          </div>
+          <div class="col-md-2">
+            <a href="/points"> <button class="btn btn-primary">Donation Points</button></a>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary">Doctors</button>
+          </div>
+          <div class="col-md-2">
+            <a href="/chat"><button class="btn btn-primary">Chat</button></a>
+          </div>
+          <div class="col-md-2">
+            <a href="/donate"><button class="btn btn-primary">Donate</button></a>
+          </div>
+          <div class="col-md-2">
+            <a href="/bloodBank"><button class="btn btn-primary">Blood Bank</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- <section id="title">
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-6">
-          <h1 class="main-heading">Be sure than sorry.</h>
+          <h1 id="title">Welcome to COVID-19 Utility! </h1>
+          <hr>
+          <button class="btn btn-dark btn-sm">Test</button>
+          <hr>
+
+          <button class="btn btn-dark btn-sm">COVID-19 Prediction</button>
+          <hr>
+          <button class="btn btn-dark btn-sm">Test</button>
+          <hr>
+
+          <button class="btn btn-dark btn-sm">COVID-19 Prediction</button>
+          <hr>
+          <button class="btn btn-dark btn-sm">Test</button>
+          <hr>
         </div>
 
         <div class="col-lg-6">
@@ -34,129 +96,36 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
+  <script>
+    token = document.cookie.split('token=')[1]
+    let url = '/auth/me';
+    let h = new Headers();
+    h.append('Authorization', 'Bearer ' + token)
 
+    let req = new Request(url, {
+      method: 'GET',
+      mode: 'cors',
+      headers: h
+    });
 
-  <!-- Features -->
-  <section id="features">
-    <div class="row">
-      <div class="feature-box col-lg-4">
-        <img class="features-icon" src="/images/clock.png" alt="">
-        <h3 class="features-heading">COVID-19 Detection.</h3>
-        <p class="features-p">COVID-19 detection within no time.</p>
-      </div>
-      <div class="feature-box col-lg-4">
-        <img class="features-icon" src="/images/plasma.png" alt="">
-        <h3 class="features-heading">Plasma Donation.</h3>
-        <p class="features-p">We have made it easier for you and your loved ones.</p>
-      </div>
-      <div class="feature-box col-lg-4">
-        <img class="features-icon" src="/images/doctor.png" alt="">
-        <h3 class="features-heading">Consult Doctors.</h3>
-        <p class="features-p">Consult doctors online without leaving the comfort of your house.</p>
-      </div>
-    </div>
-  </section>
+    fetch(req).then(res => res.json()).then(response => {
+      const {
+        data
+      } = response;
+      document.getElementById('username').innerHTML = 'Hello ' + data.name + '!';
 
-
-
-  <!-- COVID-19 Numbers Interface -->
-
-  <section id="numbers">
-    <h1 class="numbers-mainHeading">Daily Numbers</h1>
-    <h1 class="numbers-heading">Pakistan</h1>
-    <h3></h3>
-    <div class="row">
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Confirmed Cases:</h3>
-        <h3 class="numbers-stats"><%= pakistanCases %></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Deaths:</h3>
-        <h3 class="numbers-stats"><%= pakistanDeaths %> </h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Recovered:</h3>
-        <h3 class="numbers-stats"><%=pakistanRecovered%></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Active:</h3>
-        <h3 class="numbers-stats"><%= pakistanActive %></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Today Cases:</h3>
-        <h3 class="numbers-stats"><%=pakistanTodayCases%></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Today Deaths:</h3>
-        <h3 class="numbers-stats"><%= pakistanTodayDeaths %></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Today Recovered:</h3>
-        <h3 class="numbers-stats"><%=pakistanTodayRecovered%></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Critical:</h3>
-        <h3 class="numbers-stats"><%= pakistanCritical %></h3>
-      </div>
-    </div>
-  </section>
-
-  <section id="numbers">
-    <h1 class="numbers-heading">WorldWide</h1>
-    <div class="row">
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Confirmed Cases:</h3>
-        <h3 class="numbers-stats"><%= worldWideCases %></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Deaths:</h3>
-        <h3 class="numbers-stats"><%= worldWideDeaths %> </h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Recovered:</h3>
-        <h3 class="numbers-stats"><%=worldWideRecovered%></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Active:</h3>
-        <h3 class="numbers-stats"><%= worldWideActive %></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Today Cases:</h3>
-        <h3 class="numbers-stats"><%=worldWideTodayCases%></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Today Deaths:</h3>
-        <h3 class="numbers-stats"><%= worldWideTodayDeaths %></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Today Recovered:</h3>
-        <h3 class="numbers-stats"><%=worldWideTodayRecovered%></h3>
-      </div>
-      <div class="col-lg-3 numbers-div">
-        <h3 class="numbers">Critical:</h3>
-        <h3 class="numbers-stats"><%= worldWideCritical %></h3>
-      </div>
-    </div>
-    
-  </section>
-
-  <div id='map' style = 'width: 500-px; height: 600px;'></div>
-
+    }).catch(err => console.log(err.message))
+  </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
 </body>
 
-<script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
-<script>
-  mapboxgl.accessToken = 'pk.eyJ1IjoiNWFhYWQiLCJhIjoiY2tsejdydXlyMWI2NDJ2bzZ4a2pudXlycyJ9.P0k6oCwzpvzhzyDCroehSg';
-  var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    zoom: 1
-  });
-</script>
-<script type="module" src="./js/coronamap.js"></script>
-
-
 </html>
-
-<%- include("partials/footer"); -%>

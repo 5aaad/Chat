@@ -6,6 +6,8 @@
  const {
      response
  } = require('express');
+ const jwt = require('jsonwebtoken');
+
 
  // @desc Register patient
  // @route POST /api/v1/auth/register
@@ -39,8 +41,17 @@
          phoneNumber
      });
 
-     sendTokenResponse(patient, 200, res);
+     sendTokenResponse(patient, 200, res.redirect('/points'));
+
  });
+
+ // @desc Logout patient
+ // @route /auth/logout
+ // @access Public
+
+ exports.logout = asyncHandler(async (req, res, next) => {
+     res.clearCookie('token').redirect('/');
+ })
 
  // @desc Login patient
  // @route POST /api/v1/auth/login
@@ -73,11 +84,12 @@
          return next(new ErrorResponse('Invalid credentials', 401));
      }
 
-     sendTokenResponse(patient, 200, res)
+     //  res.redirect('/points');
+     sendTokenResponse(patient, 200, res);
  });
 
  // @desc Reset password
- // @route PUT /api/v1/auth/resetPassword/:resetToken
+ // @route PUT /auth/resetPassword/:resetToken
  // @access Public
  exports.resetPassword = asyncHandler(async (req, res, next) => {
      // Get hashed token
@@ -102,6 +114,17 @@
      sendTokenResponse(patient, 200, res);
  });
 
+ // GET USER INFO
+ //  TESTING
+ exports.getUserInfo = async (req, res) => {
+     // Create token
+     const token = req.headers.authentication;
+     console.log(token)
+     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+     const patient = await Patient.findById(decoded.id);
+     res.json(patient);
+ };
+
  // Get token from model, get cookie and send response
  const sendTokenResponse = (patient, statusCode, res) => {
      // Create token
@@ -109,24 +132,31 @@
 
      const options = {
          expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
-         httpOnly: true
+         httpOnly: false
      };
 
-     if (process.env.NODE_ENV === 'production') {
-         options.secure = true;
-     }
+
+     //  if (process.env.NODE_ENV === 'production') {
+     //      options.secure = true;
+     //  }
 
      res
          .status(statusCode)
          .cookie('token', token, options)
-         .json({
-             success: true,
-             token
-         });
+         .redirect('/home');
+     //  .json({
+     //      success: true,
+     //      token
+     //  }).;
+     //  .render('home', {
+     //      success: true,
+     //      token
+     //  });
+     //  localStorage.setItem('token', JSON.stringify(token));
  }
 
  // @desc Get current logged in patient
- // @route GET /api/v1/auth/me
+ // @route GET /auth/me
  // @access Private
 
  exports.getMe = asyncHandler(async (req, res, next) => {
@@ -138,13 +168,18 @@
  });
 
  // @desc Update user details
- // @route PUT /api/v1/auth/updateDetails
+ // @route PUT /auth/updateDetails
  // @access Private
 
  exports.updateDetails = asyncHandler(async (req, res, next) => {
      const fieldsToUpdate = {
          name: req.body.name,
-         email: req.body.email
+         email: req.body.email,
+         age: req.body.age,
+         bloodGroup: req.body.bloodGroup,
+         address: req.body.address,
+         gender: req.body.gender,
+         phoneNumber: req.body.phoneNumber
      }
 
      const patient = await Patient.findByIdAndUpdate(req.patient.id, fieldsToUpdate, {
@@ -155,7 +190,7 @@
      res.status(200).json({
          success: true,
          data: patient
-     })
+     }).redirect('/manageAccount');
  });
 
  // @desc Update password
@@ -196,7 +231,7 @@
      });
 
      // Create reset url
-     const resetURL = `${req.protocol}://${req.get('host')}/api/v1/auth/resetpassword/${resetToken}`;
+     const resetURL = `${req.protocol}://${req.get('host')}/auth/resetpassword/${resetToken}`;
 
      const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetURL}`;
 

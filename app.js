@@ -15,6 +15,7 @@ const errorHandler = require("./middleware/error");
 const colors = require("colors");
 const cookieParser = require('cookie-parser');
 const connectDB = require("./controllers/db");
+const debug = require('debug')('http');
 const formatMessage = require('./utils/messages');
 const {
   userJoin,
@@ -31,6 +32,8 @@ const server = http.createServer(app);
 const io = socketio(server);
 const botName = "COVID-19 Utility Bot";
 const logger = require("./middleware/logger");
+const Chat = require('./models/Chat');
+const Doctor = require('./models/Doctor');
 
 app.use(logger);
 app.use(errorHandler);
@@ -41,6 +44,8 @@ const plasmas = require('./routes/plasmas');
 const auth = require('./routes/auth');
 const admin = require('./routes/admin');
 const reviews = require('./routes/reviews');
+const doctor = require('./routes/doctor');
+const prediction = require('./routes/prediction');
 
 // load env vars
 dotenv.config({
@@ -125,102 +130,117 @@ io.on('connection', socket => {
 });
 
 // COVID-19 API
-var worldWideCases;
-var worldWideTodayCases;
-var worldWideDeaths;
-var worldWideTodayDeaths;
-var worldWideRecovered;
-var worldWideTodayRecovered;
-var worldWideActive;
-var worldWideCritical;
+// var worldWideCases;
+// var worldWideTodayCases;
+// var worldWideDeaths;
+// var worldWideTodayDeaths;
+// var worldWideRecovered;
+// var worldWideTodayRecovered;
+// var worldWideActive;
+// var worldWideCritical;
 
-request("https://disease.sh/v3/covid-19/all", function (error, response, body) {
-  data = JSON.parse(body);
-  worldWideCases = data.cases;
-  worldWideTodayCases = data.todayCases;
-  worldWideDeaths = data.deaths;
-  worldWideTodayDeaths = data.todayDeaths;
-  worldWideRecovered = data.recovered;
-  worldWideTodayRecovered = data.todayRecovered;
-  worldWideActive = data.active;
-  worldWideCritical = data.critical;
-})
+// request("https://disease.sh/v3/covid-19/all", function (error, response, body) {
+//   data = JSON.parse(body);
+//   worldWideCases = data.cases;
+//   worldWideTodayCases = data.todayCases;
+//   worldWideDeaths = data.deaths;
+//   worldWideTodayDeaths = data.todayDeaths;
+//   worldWideRecovered = data.recovered;
+//   worldWideTodayRecovered = data.todayRecovered;
+//   worldWideActive = data.active;
+//   worldWideCritical = data.critical;
+// })
 
-var pakistanCases;
-var pakistanTodayCases;
-var pakistanDeaths;
-var pakistanTodayDeaths;
-var pakistanRecovered;
-var pakistanTodayRecovered;
-var pakistanActive;
-var pakistanCritical;
+// var pakistanCases;
+// var pakistanTodayCases;
+// var pakistanDeaths;
+// var pakistanTodayDeaths;
+// var pakistanRecovered;
+// var pakistanTodayRecovered;
+// var pakistanActive;
+// var pakistanCritical;
 
-request("https://disease.sh/v3/covid-19/countries/Pakistan?strict=true", function (error, response, body) {
-  data = JSON.parse(body);
-  pakistanCases = data.cases;
-  pakistanTodayCases = data.todayCases;
-  pakistanDeaths = data.deaths;
-  pakistanTodayDeaths = data.todayDeaths;
-  pakistanRecovered = data.recovered;
-  pakistanTodayRecovered = data.todayRecovered;
-  pakistanActive = data.active;
-  pakistanCritical = data.critical;
-})
+// request("https://disease.sh/v3/covid-19/countries/Pakistan?strict=true", function (error, response, body) {
+//   data = JSON.parse(body);
+//   pakistanCases = data.cases;
+//   pakistanTodayCases = data.todayCases;
+//   pakistanDeaths = data.deaths;
+//   pakistanTodayDeaths = data.todayDeaths;
+//   pakistanRecovered = data.recovered;
+//   pakistanTodayRecovered = data.todayRecovered;
+//   pakistanActive = data.active;
+//   pakistanCritical = data.critical;
+// })
 
 
 //GET Routes
 
-// app.get("/", function (req, res) {
-//   res.render("welcome");
-// });
-
-app.get("/stores", function (req, res) {
-  res.render("stores");
+app.get("/", function (req, res) {
+  res.render("welcome");
 });
 
-app.get("/addStore", function (req, res) {
-  res.render("addStore");
+app.get('/register', function (req, res) {
+  res.render('register');
 });
 
-app.get("/signup", function (req, res) {
-  res.render("signup");
+app.get('/registerDoctor', function (req, res) {
+  res.render('registerDoctor');
+});
+
+app.get('/login', function (req, res) {
+  res.render('login');
+});
+
+app.get('/resetPassword', function (req, res) {
+  res.render('resetPassword');
 })
 
-app.get("/signin", function (req, res) {
-  res.render("signin");
+app.get('/manageAccount', function (req, res) {
+  res.render('manageAccount');
+})
+
+app.get('/api/v1/points/radius/', function (req, res) {
+  res.render('index');
 });
+
+app.get('/createPoint', function (req, res) {
+  res.render('createPoint');
+});
+
+app.get('/addReview', function (req, res) {
+  res.render('addReview');
+})
+
+app.get('/updatePassword', function (req, res) {
+  res.render('updatePassword');
+});
+
+app.get('/manageReviews', function (req, res) {
+  res.render('manageReviews')
+})
 
 app.get("/home", function (req, res) {
-  res.render("home", {
-    pakistanCases: pakistanCases,
-    pakistanTodayCases: pakistanTodayCases,
-    pakistanDeaths: pakistanDeaths,
-    pakistanTodayDeaths: pakistanTodayDeaths,
-    pakistanRecovered: pakistanRecovered,
-    pakistanTodayRecovered: pakistanTodayRecovered,
-    pakistanActive: pakistanActive,
-    pakistanCritical: pakistanCritical,
-    worldWideCases: worldWideCases,
-    worldWideTodayCases: worldWideTodayCases,
-    worldWideDeaths: worldWideDeaths,
-    worldWideTodayDeaths: worldWideTodayDeaths,
-    worldWideRecovered: worldWideRecovered,
-    worldWideTodayRecovered: worldWideTodayRecovered,
-    worldWideActive: worldWideActive,
-    worldWideCritical: worldWideCritical
-  });
+  res.render('home');
 });
 
-app.get("/chat", function (req, res) {
-  res.render("chat");
-});
-
-app.get("/index", function (req, res) {
-  res.render("index");
+app.get('/doctorHome', function (req, res) {
+  res.render('doctorHome');
 })
 
-app.get("/profile", function (req, res) {
-  res.render("home");
+app.get("/index", function (req, res) {
+  res.render('index');
+});
+
+app.get('/loginChoice', function (req, res) {
+  res.render('loginChoice');
+})
+
+app.get('/registerChoice', function (req, res) {
+  res.render('registerChoice');
+});
+
+app.get('/doctorLogin', function (req, res) {
+  res.render('doctorLogin');
 });
 
 covidPrediction = {};
@@ -236,8 +256,38 @@ app.get('/prediction', (req, res) => {
   res.render('covidImageUpload');
 });
 
+app.get('/donate', function (req, res) {
+  res.render('donate');
+});
+
+app.get('/chat', async function (req, res, next) {
+  const doctors = await Doctor.find();
+
+  res.status(200).render('chat', {
+    success: true,
+    count: doctors.length,
+    data: doctors
+  });
+});
+
 
 // POST routes
+
+app.post('/chat', async function (req, res) {
+  // const sentMessage = req.body.sentMessage;
+  // const participant1 = req.body.patientId;
+  // const participant2 = req.body.doctorId;
+
+  const chat = await Chat.create({
+    message: req.body.sentMessage,
+    patientId: req.body.patientId,
+    doctorId: req.body.doctorId
+  });
+  res.status(200).json({
+    success: true,
+    data: chat
+  })
+});
 
 app.post('/prediction', (req, res) => {
   // res.render('covidPrediction');
@@ -253,8 +303,8 @@ app.post('/prediction', (req, res) => {
     }
   });
 
-  const pythonFilePath = 'E:/Test/covid-model-files/model.py';
-  const imageFilePath = 'E:/Test/covid-model-files/image_json_file.json';
+  const pythonFilePath = 'C:/Users/Saad Ur Rehman/Desktop/COVID19/covid-model-files/model.py';
+  const imageFilePath = 'C:/Users/Saad Ur Rehman/Desktop/COVID19/covid-model-files/image_json_file.json';
 
   var commands = [
     'conda activate covid-site',
@@ -313,13 +363,13 @@ app.post('/prediction', (req, res) => {
 });
 
 // Mount routers
-
-app.use('/api/v1/stores', require('./routes/stores'));
-app.use('/api/v1/points', points);
-app.use('/api/v1/plasmas', plasmas);
-app.use('/api/v1/auth', auth);
+app.use('/points', points);
+app.use('/plasmas', plasmas);
+app.use('/auth', auth);
+app.use('/doctor', doctor);
 app.use('/api/v1/admin', admin);
-app.use('/api/v1/reviews', reviews);
+app.use('/reviews', reviews);
+app.use('/prediction', prediction)
 
 const PORT = process.env.PORT || 3000;
 

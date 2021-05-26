@@ -1,9 +1,9 @@
 const NodeGeocoder = require('node-geocoder');
 
 const options = {
-  provider: process.env.GEOCODER_PROVIDER,
+  provider: 'mapquest',
   httpAdapter: 'https',
-  apiKey: process.env.GEOCODER_API_KEY,
+  apiKey: 'SEvyTx3tiCeBoR6bLWjyp91eiL5GNJdn',
   formatter: null
 };
 

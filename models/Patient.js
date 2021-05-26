@@ -4,11 +4,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const PatientSchema = new mongoose.Schema({
-    role: {
-        type: String,
-        enum: ['patient', 'doctor', 'admin', 'donationPoint'],
-        default: 'admin',
-    },
     name: {
         type: String,
         required: [true, 'Please add a name'],
@@ -52,6 +47,16 @@ const PatientSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         maxlength: [15, 'Phone number cannot be longer than 15 numbers']
+    },
+    amount: {
+        type: Number,
+        default: 0,
+        validate: {
+            validator: function (v) {
+                return v >= 0;
+            },
+            message: (props) => `${props.value} is not a valid amount to Donate!`,
+        },
     },
     photo: {
         type: String

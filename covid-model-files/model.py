@@ -103,7 +103,7 @@ test_image = preprocess(image)
 # model.add(Dense(2,input_dim=128,activation='softmax'))
 # model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model = load_model('E:/Test/covid-model-files/h5_saved_model')
+model = load_model('C:/Users/Saad Ur Rehman/Desktop/COVID19/covid-model-files/h5_saved_model')
 # model = tf.saved_model.load(
 #     export_dir='P:/covid-site/tf_saved_model', tags=None, options=None
 # )
@@ -117,6 +117,8 @@ label = label_dict[result]
 output = json.dumps({"prediction": label, "probability": accuracy})
 
 print(output)
+
+quit()
 # print(prediction, result, accuracy, label)
 
 

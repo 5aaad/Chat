@@ -9,16 +9,16 @@ const {
     updatePassword,
     getUserInfo,
     logout
-} = require('../controllers/auth');
+} = require('../controllers/doctor');
 
 const router = express.Router();
 const {
-    protect
-} = require('../middleware/auth');
+    doctorProtect
+} = require('../middleware/doctorAuth');
 
 router.post('/register', register);
 router.post('/login', login);
-router.get('/me', protect, getMe);
+router.get('/me', doctorProtect, getMe);
 router.put('/updateDetails', updateDetails);
 router.put('/updatePassword', updatePassword);
 router.post('/forgotPassword', forgotPassword);
