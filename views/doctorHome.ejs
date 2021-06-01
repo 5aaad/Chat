@@ -61,7 +61,7 @@
                         <button class="btn btn-primary">Patients</button>
                     </div>
                     <div class="col-md-2">
-                        <a href="/chat"><button class="btn btn-primary">Chat</button></a>
+                        <a href="/chat-dashboard"><button class="btn btn-primary">Chat</button></a>
                     </div>
                     <div class="col-md-2">
                         <a href="/donate"><button class="btn btn-primary">Donate</button></a>
@@ -117,7 +117,7 @@
             } = response;
             document.getElementById('username').innerHTML = 'Hello ' + data.name + '!';
 
-        }).catch(err => console.log(err.message))
+        }).catch(err => console.log(err.message));
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">

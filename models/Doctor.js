@@ -46,6 +46,12 @@ const DoctorSchema = new mongoose.Schema({
     photo: {
         type: String
     },
+
+    role: {
+        type: String,
+        default:"doctor"
+    },
+
     createdAt: {
         type: Date,
         default: Date.now

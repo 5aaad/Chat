@@ -166,6 +166,8 @@ exports.getMe = asyncHandler(async (req, res, next) => {
     });
 });
 
+
+
 // @desc Update user details
 // @route PUT /auth/updateDetails
 // @access Private
@@ -264,10 +266,21 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 exports.chat = asyncHandler(async function (req, res, next) {
     const doctors = await Doctor.find();
     const patients = await Patient.find();
-
-    res.status(200).render('chat', {
+    
+    res.status(200).json({
         success: true,
-        data: doctors
-        // dataPatient: patients
+        data: doctors,
+        dataPatients:patients
     });
+    
+});
+
+exports.patient = asyncHandler(async function (req, res, next) {
+    const patients = await Patient.find();
+    
+    res.status(200).json({
+        success: true,
+        data: patients,
+    });
+    
 });

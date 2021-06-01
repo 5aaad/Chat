@@ -16,13 +16,17 @@
 	<link
 		href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Lato&family=Montserrat:wght@800&family=Ubuntu&display=swap"
 		rel="stylesheet">
+	<script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
 	<link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+		integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
 	<title>COVID-19 Utility | Welcome </title>
 </head>
 
 <body>
 	<!-- Navbar -->
-	<nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="/"><i class="fas fa-briefcase-medical"></i> COVID-19 Utility</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
@@ -41,7 +45,7 @@
 						<a class="nav-link" href="#">|</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/points">Browse Donation Points or Doctors</a>
+						<a class="nav-link" href="/points">Browse Donation Points</a>
 					</li>
 				</ul>
 			</div>
@@ -93,86 +97,94 @@
 			</div>
 		</div>
 	</section>
+	<!-- COVID-19 Numbers Interface -->
+
+	<section id="numbers">
+		<h1 style="text-align: center; color: black;" class="display-4 ">Daily Numbers</h1>
+		<h1 style="text-align: center; color: black;" class="display-4 ">Pakistan</h1>
+		<h3></h3>
+		<div class="row">
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Confirmed Cases:</h3>
+				<h3 class="numbers-stats"><%= pakistanCases %></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Deaths:</h3>
+				<h3 class="numbers-stats"><%= pakistanDeaths %> </h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Recovered:</h3>
+				<h3 class="numbers-stats"><%=pakistanRecovered%></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Active:</h3>
+				<h3 class="numbers-stats"><%= pakistanActive %></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Today Cases:</h3>
+				<h3 class="numbers-stats"><%=pakistanTodayCases%></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Today Deaths:</h3>
+				<h3 class="numbers-stats"><%= pakistanTodayDeaths %></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Today Recovered:</h3>
+				<h3 class="numbers-stats"><%=pakistanTodayRecovered%></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Critical:</h3>
+				<h3 class="numbers-stats"><%= pakistanCritical %></h3>
+			</div>
+		</div>
+	</section>
+
+	<section id="numbers">
+		<h1 style="text-align: center; color: black;" class="display-4">WorldWide</h1>
+		<div class="row">
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Confirmed Cases:</h3>
+				<h3 class="numbers-stats"><%= worldWideCases %></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Deaths:</h3>
+				<h3 class="numbers-stats"><%= worldWideDeaths %> </h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Recovered:</h3>
+				<h3 class="numbers-stats"><%=worldWideRecovered%></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Active:</h3>
+				<h3 class="numbers-stats"><%= worldWideActive %></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Today Cases:</h3>
+				<h3 class="numbers-stats"><%=worldWideTodayCases%></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Today Deaths:</h3>
+				<h3 class="numbers-stats"><%= worldWideTodayDeaths %></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Today Recovered:</h3>
+				<h3 class="numbers-stats"><%=worldWideTodayRecovered%></h3>
+			</div>
+			<div class="col-lg-3 numbers-div">
+				<h3 class="numbers">Critical:</h3>
+				<h3 class="numbers-stats"><%= worldWideCritical %></h3>
+			</div>
+		</div>
+
+	</section>
+
+	<div id='map' style='width: 500-px; height: 600px;'></div>
+
 
 
 
 
 </html>
-
-<!-- Latest bootcamps -->
-<!-- <section class="latest py-5 bg-light">
-			<div class="container">
-				<h3>Latest Bootcamps</h3>
-				<div class="card-group">
-					<div class="card">
-						<img src="img/image_1.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<h5 class="card-title">
-								<a href="bootcamp.html"
-									>Devworks Bootcamp
-									<span class="float-right badge badge-success">8.8</span></a
-								>
-							</h5>
-							<span class="badge badge-dark mb-2">Boston, MA</span>
-							<p class="card-text">
-								Devworks is a full stack JavaScript Bootcamp located in the
-								heart of Boston that focuses on the technologies you need to get
-								a high paying job as a web developer
-							</p>
-							<p class="card-text">
-								<small class="text-muted"
-									>Web Development, UI/UX, Mobile Development</small
-								>
-							</p>
-						</div>
-					</div>
-					<div class="card">
-						<img src="img/image_2.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<h5 class="card-title">
-								<a href="bootcamp.html"
-									>ModernTech Bootcamp
-									<span class="float-right badge badge-success">7.5</span></a
-								>
-							</h5>
-							<span class="badge badge-dark mb-2">Boston, MA</span>
-							<p class="card-text">
-								ModernTech has one goal, and that is to make you a rockstar
-								developer and/or designer with a six figure salary. We teach
-								both development and UI/UX
-							</p>
-							<p class="card-text">
-								<small class="text-muted"
-									>Web Development, UI/UX, Mobile Development</small
-								>
-							</p>
-						</div>
-					</div>
-					<div class="card">
-						<img src="img/image_3.jpg" class="card-img-top" alt="..." />
-						<div class="card-body">
-							<h5 class="card-title">
-								<a href="bootcamp.html"
-									>Codemasters
-									<span class="float-right badge badge-success">9.2</span></a
-								>
-							</h5>
-							<span class="badge badge-dark mb-2">Burlington, VT</span>
-							<p class="card-text">
-								Is coding your passion? Codemasters will give you the skills and
-								the tools to become the best developer possible. We specialize
-								in full stack web development and data science
-							</p>
-							<p class="card-text">
-								<small class="text-muted"
-									>Web Development, Data Science, Marketing</small
-								>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section> -->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
@@ -184,9 +196,14 @@
 	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 </script>
 <script>
-	document.getElementById('token').innerHTML = document.cookie.split('token=')[1];
+	mapboxgl.accessToken = 'pk.eyJ1IjoiNWFhYWQiLCJhIjoiY2tsejdydXlyMWI2NDJ2bzZ4a2pudXlycyJ9.P0k6oCwzpvzhzyDCroehSg';
+	var map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v11',
+		zoom: 1
+	});
 </script>
-
+<script type="module" src="./js/coronamap.js"></script>
 </body>
 
 </html>

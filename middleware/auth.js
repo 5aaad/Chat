@@ -4,7 +4,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const Patient = require('../models/Patient');
 
 // Protect routes
-exports.protect = asyncHandler(async (req, res, next) => {
+exports.protectPatient = asyncHandler(async (req, res, next) => {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -33,10 +33,10 @@ exports.protect = asyncHandler(async (req, res, next) => {
 });
 
 // Grant access to specific roles
-exports.authorize = (...roles) => {
+exports.authorizePatient = function (...patient) {
     return (req, res, next) => {
-        if (!roles.includes(req.patient.role)) {
-            return next(new ErrorResponse(`${req.patient.role} is not authorized to access this route`, 403));
+        if (!patient) {
+            return next(new ErrorResponse(`${req.patient} is not authorized to access this route`, 403));
         }
         next();
     }

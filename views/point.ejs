@@ -19,8 +19,8 @@
 
     <link rel="stylesheet" href="css/bootstrap.css" />
     <link rel="stylesheet" href="css/style.css" />
-    <script src='https://api.mapbox.com/mapbox-gl-js/v1.2.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.2.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
     <title>COVID-19 Utility</title>
 </head>
 
@@ -108,7 +108,50 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
-    <script src="js/mapbox.js"></script>
+    <script>
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoiNWFhYWQiLCJhIjoiY2tsejdydXlyMWI2NDJ2bzZ4a2pudXlycyJ9.P0k6oCwzpvzhzyDCroehSg';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            zoom: 7,
+            center: [-73.200576, 44.478305]
+            // interactive: false
+        });
+
+        map.on('load', function () {
+            map.addLayer({
+                id: 'points',
+                type: 'symbol',
+                source: {
+                    type: 'geojson',
+                    data: {
+                        type: 'FeatureCollection',
+                        features: [{
+                                type: 'Feature',
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: [-73.200576, 44.478305]
+                                },
+                                properties: {
+                                    title: "<%= data.name %>",
+                                    icon: 'hospital'
+                                }
+                            },
+
+                        ]
+                    }
+                },
+                layout: {
+                    'icon-image': '{icon}-15',
+                    'text-field': '{title}',
+                    'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                    'text-offset': [0, 0.6],
+                    'text-anchor': 'top'
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

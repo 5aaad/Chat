@@ -1,12 +1,46 @@
 <!DOCTYPE html>
 
 <head>
-	<title>COVID-19 TESTING</title>
+	<title>COVID-19 Utility</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
 
 <body>
-	<p>PREDICTION: <%=predictionOutput.prediction %> </p>
-	<p>PROBABILITY: <%= predictionOutput.probability %> </p>
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+		<div class="container">
+			<a class="navbar-brand" href="/"><i class="fas fa-briefcase-medical"></i> COVID-19 Utility</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+							data-toggle="dropdown">
+							<i class="fas fa-user"></i> Account
+						</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="/managePoints">Manage Points</a>
+							<a class="dropdown-item" href="/manageReviews">Manage Reviews</a>
+							<a class="dropdown-item" href="/manageAccount">Manage Account</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<h1 style="text-align: center;">Result</h1>
+		<hr>
+		<h3 style="text-align: center;">Prediction: <%=predictionOutput.prediction %> </h3>
+		<h3 style="text-align: center;">Probability: <%= predictionOutput.probability %> </h3>
+	</div>
 
 </body>
 

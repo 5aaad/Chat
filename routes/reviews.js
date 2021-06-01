@@ -32,8 +32,8 @@ router
 router
     .route('/:id')
     .get(getReview)
-    .put(protect, authorize('patient', 'admin'), updateReview)
-    .delete(protect, authorize('patient', 'admin'), deleteReview);
+    .put(updateReview)
+    .delete(deleteReview);
 
 router.route('/addreview/:pointId')
     .get(getAddReview)

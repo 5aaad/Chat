@@ -33,11 +33,11 @@ router.route('/:id/photo').put(pointPhotoUpload);
 router
     .route('/')
     .get(advancedResults(Point, 'plasma'), getPoints)
-    .post(protect, authorize('admin'), createPoint);
+    .post(createPoint);
 
 router.route('/:id')
     .get(getPoint)
-    .put(protect, authorize('admin'), updatePoint)
-    .delete(protect, authorize('admin'), deletePoint);
+    .put(updatePoint)
+    .delete(deletePoint);
 
 module.exports = router;

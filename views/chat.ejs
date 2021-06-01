@@ -1,78 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<html>
 
 <head>
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
-		id="bootstrap-css">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
-		rel="stylesheet">
-	<link rel="stylesheet" href="css/style.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/chat.css">
 </head>
 
 <body>
-	<div class="container">
-		<h3 class=" text-center">Messaging</h3>
-		<div class="messaging">
-			<div class="inbox_msg">
-				<div class="inbox_people">
-					<div class="headind_srch">
-						<div class="recent_heading">
-							<h4>Recent</h4>
-						</div>
+    <div class="container">
+        <h3 class=" text-center">Messaging</h3>
+        <div class="messaging">
+            <div class="inbox_msg">
+                <div class="inbox_people">
+                    <div class="headind_srch">
+                        <div class="recent_heading">
+                            <h4>Recent</h4>
+                        </div>
+                    </div>
+                    <!-- Chat Box-->
+                    <div class="col-7 px-0">
+                        <div class="px-4 py-5 chat-box bg-white">
+                            <!-- Sender Message-->
+                            <div class="media w-50 mb-3"><img
+                                    src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg"
+                                    alt="user" width="50" class="rounded-circle">
+                                <div class="media-body ml-3">
+                                    <div class="bg-light rounded py-2 px-3 mb-2">
+                                        <p class="text-small mb-0 text-muted">Test which is a new approach all
+                                            solutions</p>
+                                    </div>
+                                </div>
+                            </div>
 
-					</div>
-					<div class="inbox_chat">
-						<div class="chat_list">
-							<% for(var i=0; i<data.length; i++) { %>
-							<div class="chat_people">
-								<div class="chat_ib">
-									<h5><%= data[i].name %> <span class="chat_date">Dec 25</span></h5>
-									<p>Test, which is a new approach to have all solutions
-										astrology under one roof.</p>
-								</div>
-							</div>
-							<% } %>
-						</div>
-					</div>
-				</div>
-				<div class="mesgs">
-					<form action="/chat" method="POST">
-						<div class="msg_history">
-							<div class="incoming_msg">
-								<div class="received_msg form-group">
-									<div class="received_withd_msg">
-										<p>Test which is a new approach to have all
-											solutions</p>
-									</div>
-								</div>
-							</div>
-							<div class="outgoing_msg">
-								<div class="sent_msg form-group">
-									<p>Test which is a new approach to have all
-										solutions</p>
-								</div>
-							</div>
-						</div>
-						<div class="type_msg">
-							<div class="input_msg_write">
-								<input type="text" class="write_msg" placeholder="Type a message" name="sentMessage" />
-								<input type="text" class="write_msg" placeholder="Type a message" id="doctorId" value=""
-									name="doctorId" hidden />
+                            <!-- Reciever Message-->
+                            <div class="media w-50 ml-auto mb-3">
+                                <div class="media-body">
+                                    <div class="bg-primary rounded py-2 px-3 mb-2">
+                                        <p class="text-small mb-0 text-white">Test which is a new approach to
+                                            have all solutions</p>
+                                    </div>
 
+                                </div>
+                            </div>
+                        </div>
 
-
-								<button class="msg_send_btn form-group" type="submit"><i class="fa fa-paper-plane-o"
-										aria-hidden="true"></i></button>
-							</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	</div>
+                        <!-- Typing area -->
+                        <form action="#" class="bg-light">
+                            <div class="input-group">
+                                <input type="text" placeholder="Type a message" aria-describedby="button-addon2"
+                                    class="form-control rounded-0 border-0 py-4 bg-light">
+                                <div class="input-group-append">
+                                    <button id="button-addon2" type="submit" class="btn btn-link"> <i
+                                            class="fa fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
 </body>
 
 </html>
